@@ -10,14 +10,13 @@ export async function POST(req: NextRequest) {
     const data = evt.data as UserJSON;
     const { id, first_name, last_name, username, image_url, email_addresses } =
       data;
-    const eventType = evt.type;
 
     if (evt.type === "user.created") {
       await prisma.user.create({
         data: {
           clerkId: id,
           firstName: first_name || "",
-          lastName: last_name,
+          lastName: last_name || "",
           username: username || "",
           email: email_addresses[0].email_address,
           profileUrl: image_url,
@@ -47,10 +46,6 @@ export async function POST(req: NextRequest) {
         },
       });
     }
-    // console.log(
-    //   `Received webhook with ID ${id}  and event type of ${eventType}`
-    // );
-    // console.log("Webhook payload:", evt.data);
 
     return new Response("Webhook received", { status: 200 });
   } catch (err) {
