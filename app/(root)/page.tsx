@@ -13,18 +13,28 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import DeleteButton from "@/components/DeleteButton";
 import { getMyNotes, updateNotes } from "../actions/user.action";
+import AddNoteButton from "@/components/AddNoteButton";
 
 export const dynamic = "force-dynamic";
 
 const page = async () => {
   const notes = await getMyNotes();
-
   return (
     <>
-      <div className="flex justify-center m-5 text-2xl font-extrabold text-primary">
+      <div className="flex justify-center mt-7 text-2xl font-extrabold text-primary">
         My Notes
       </div>
-      <div className="flex flex-col justify-center items-center gap-3 m-5 ">
+      <div className="flex flex-col justify-center items-center gap-3 my-5 mt-10 mb-5">
+        {notes.length === 0 && (
+          <div className="flex flex-col justify-center items-center gap-3 text-center">
+            <div>
+              You don’t have any notes yet.
+              <br />
+              Create one to get started.
+            </div>
+            <AddNoteButton />
+          </div>
+        )}
         {notes.map((note) => (
           <Sheet key={note.id}>
             <SheetTrigger asChild>
@@ -57,11 +67,7 @@ const page = async () => {
                   />
                 </div>
                 <SheetFooter>
-                  <Button
-                    form="update-form"
-                    type="submit"
-                    variant="default"
-                  >
+                  <Button form="update-form" type="submit" variant="default">
                     Save changes
                   </Button>
                   <SheetClose asChild>
